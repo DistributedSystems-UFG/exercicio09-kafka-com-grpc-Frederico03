@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package temperature;
+
+import "google/protobuf/empty.proto";
+
+message TemperatureRecord {
+  int64 id = 1;
+  string sensor_id = 2;
+  string source_timestamp = 3;
+  string processed_at = 4;
+  double temperature = 5;
+  double moving_average_last_2h = 6;
+}
+
+message LatestResponse {
+  bool found = 1;
+  TemperatureRecord record = 2;
+}
+
+message HistoryRequest {
+  int32 limit = 1;
+}
+
+message HistoryResponse {
+  repeated TemperatureRecord records = 1;
+}
+
+service TemperatureService {
+  rpc GetLatest(google.protobuf.Empty) returns (LatestResponse);
+  rpc GetHistory(HistoryRequest) returns (HistoryResponse);
+}
